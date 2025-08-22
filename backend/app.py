@@ -1,8 +1,19 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Optional, List, Any, Dict
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Movies/Series RAG Chatbot")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = ["*"],
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"]
+)
+
 
 class AskRequest(BaseModel):
     query: str = Field(..., min_length=2)

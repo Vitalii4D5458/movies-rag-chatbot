@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 import os, json
 import faiss
+import numpy as np
 
 FAISS_DIR = os.getenv("FAISS_DIR", "backend/faiss_store")
 
@@ -38,3 +39,20 @@ class FaissStore:
         n = len(self._ids)
         if not (len(self._docs) == n and len(self._metas) == n):
             raise RuntimeError("FAISS store files length mismatch. Re-ingest.")
+        
+    def query(self, qvec: List[float], k: int = 5):
+        xq = np.array([qvec], dtype="float32")
+        if self._normalize:
+            faiss.normalize_L2(xq)
+        D, I = self._index.search(xq, k)
+        results = []
+        for dist, idx in zip(D[0], I[0]):
+            if idx == -1:
+                continue
+            results.append({
+                "id": self._ids[idx],
+                "plot": self._docs[idx],
+                "meta": self._metas[idx],
+                "score": float(dist)
+            })
+        return results

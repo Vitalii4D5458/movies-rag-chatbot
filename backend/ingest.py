@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from tqdm import tqdm
 from typing import List, Dict, Any
 import faiss
-
+import numpy as np
 from .embed import Embedder
 
 load_dotenv()

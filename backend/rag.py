@@ -2,7 +2,7 @@ import os
 from .embed import Embedder
 from .faiss_store import FaissStore
 from openai import OpenAI
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 class RAGPipeline:
     def __init__(self):
@@ -30,3 +30,30 @@ class RAGPipeline:
                 head += f" | Жанри: {', '.join(genres)}"
             lines.append(head + f"\n  Коротко: {plot[:600]}")
         return "\n".join(lines)
+    
+    async def answer(self, query: str, top_k: Optional[int] = None):
+        k = top_k or int(os.getenv("TOP_K_DEFAULT", "5"))
+        qvec = self.embedder.embed([query])[0]
+        retrieved_raw = self.store.query(qvec, k)
+
+        retrieved = []
+        for r in retrieved_raw:
+            m = r["meta"] or {}
+            retrieved.append({
+                "id": r["id"],
+                "title": m.get("title"),
+                "year": m.get("year"),
+                "genres": m.get("genres"),
+                "plot": r.get("plot"),
+                "distance": 1.0 - r["score"]
+            })
+
+        context = self._format_context(retrieved_raw)
+
+        if not self._chat_client:
+            answer = (
+                "LLM не налаштовано. Ось релевантні знайдені позиції:\n\n"
+                + context + "\n\n"
+                + "Увімкніть OpenAI у `.env`, щоб отримувати згенеровані відповіді."
+            )
+            return {"answer": answer, "retrieved": retrieved, "used_llm": False}

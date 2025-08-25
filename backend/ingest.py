@@ -2,6 +2,7 @@ import argparse, json, os, pandas as pd
 from dotenv import load_dotenv
 from tqdm import tqdm
 from typing import List, Dict, Any
+import faiss
 
 from .embed import Embedder
 
@@ -53,3 +54,19 @@ def main():
         ids.append(_id)
         docs.append(plot)
         metas.append({"title": title, "year": year, "genres": genres})
+    
+    BATCH = 256
+    for i in tqdm(range(0, len(docs), BATCH), desc="Embedding"):
+        chunk_docs = docs[i:i+BATCH]
+        vecs = embedder.embed(chunk_docs)
+        all_vecs.extend(vecs)
+
+    if not all_vecs:
+        raise RuntimeError("No vectors to index. Check your input.")
+
+    x = np.array(all_vecs, dtype="float32")
+    dim = x.shape[1]
+    if NORMALIZE:
+        faiss.normalize_L2(x)
+    index = faiss.IndexFlatIP(dim)
+    index.add(x)

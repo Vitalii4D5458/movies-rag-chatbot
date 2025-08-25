@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Movies/Series RAG Chatbot — FAISS</title>
+    <style></style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>Movies/Series RAG Chatbot — FAISS</h1>
+        <p class="muted">
+          Приклади: «Розкажи сюжет фільму Inception» або «Порадь фільм про
+          подорожі у часі».
+        </p>
+        <div class="row">
+          <textarea id="q" placeholder="Ваш запит..."></textarea>
+        </div>
+        <div class="row" style="margin-top: 8px">
+          <button id="ask">Запитати</button>
+          <span id="status" class="badge">Готово</span>
+        </div>
+        <div id="out" class="answer" style="margin-top: 16px"></div>
+        <div id="retr" class="retrieved"></div>
+      </div>
+      <div class="footer">
+        Backend: http://localhost:8000 • OpenAI опційний • FAISS
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -70,3 +70,19 @@ def main():
         faiss.normalize_L2(x)
     index = faiss.IndexFlatIP(dim)
     index.add(x)
+    
+    ensure_dir(FAISS_DIR)
+    faiss.write_index(index, os.path.join(FAISS_DIR, "index.faiss"))
+    with open(os.path.join(FAISS_DIR, "ids.json"), "w", encoding="utf-8") as f:
+        json.dump(ids, f, ensure_ascii=False, indent=2)
+    with open(os.path.join(FAISS_DIR, "docs.json"), "w", encoding="utf-8") as f:
+        json.dump(docs, f, ensure_ascii=False, indent=2)
+    with open(os.path.join(FAISS_DIR, "metas.json"), "w", encoding="utf-8") as f:
+        json.dump(metas, f, ensure_ascii=False, indent=2)
+    with open(os.path.join(FAISS_DIR, "index_info.json"), "w", encoding="utf-8") as f:
+        json.dump({"dim": dim, "normalize": NORMALIZE}, f, indent=2)
+
+    print(f"Indexed {len(ids)} items to FAISS at {FAISS_DIR} (dim={dim}, normalize={NORMALIZE})")
+
+if __name__ == "__main__":
+    main()

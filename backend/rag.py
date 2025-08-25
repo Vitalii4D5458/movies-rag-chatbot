@@ -3,6 +3,8 @@ from .embed import Embedder
 from .faiss_store import FaissStore
 from openai import OpenAI
 from typing import List, Dict, Any, Optional
+from .prompt_templates import SYSTEM_PROMPT, USER_TEMPLATE
+
 
 class RAGPipeline:
     def __init__(self):
@@ -57,3 +59,15 @@ class RAGPipeline:
                 + "Увімкніть OpenAI у `.env`, щоб отримувати згенеровані відповіді."
             )
             return {"answer": answer, "retrieved": retrieved, "used_llm": False}
+        
+        user = USER_TEMPLATE.format(query=query, k=k, context=context)
+        chat = self._chat_client.chat.completions.create(
+            model=self.openai_model,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user}
+            ],
+            temperature=0.4,
+        )
+        answer = chat.choices[0].message.content
+        return {"answer": answer, "retrieved": retrieved, "used_llm": True}

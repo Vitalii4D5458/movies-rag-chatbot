@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from .rag import RAGPipeline
 from pydantic import BaseModel, Field
 from typing import Optional, List, Any, Dict
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +30,11 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/ask", response_model=AskResponse)
-async def ask(req: AskRequest): 
-    return {"message":"data"}
+@app.post("/ask", response_model=AskResponse)
+async def ask(req: AskRequest):
+    try:
+        rag = RAGPipeline()
+        result = await rag.answer(req.query, top_k=req.top_k)
+        return AskResponse(**result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

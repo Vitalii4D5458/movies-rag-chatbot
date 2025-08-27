@@ -9,8 +9,6 @@
 - Generate user-friendly answers with LLM using retrieved plots as context.
 - Simple FastAPI server with /ask endpoint.
 
----
-
 ## Technologies Used
 
 - **Backend**

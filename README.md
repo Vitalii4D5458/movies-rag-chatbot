@@ -51,39 +51,48 @@ movies-rag-chatbot/
 
 ### 1. Клонування репозиторію
 
-````bash
+```bash
 git clone https://github.com/<your-username>/movies-rag-chatbot.git
 cd movies-rag-chatbot
+```
 
 2️. Backend
 Встановлення залежностей
+
 ```bash
 python -m venv venv
 .\venv\Scripts\activate   # або source venv/bin/activate для MacOS/Linux
 pip install -r requirements.txt
+```
 
 Змінні середовища
 Створи файл .env у backend/ з вмістом:
+
 ```bash
 GEMINI_API_KEY=your_google_gemini_api_key
+```
 
 Побудова індексу (одноразово)
+
 ```bash
 cd backend
 python src/ingest.py --csv data/imdb_top_1000.csv --index_path data/faiss.index --meta_path data/meta.json
+```
 
 Запуск API
+
 ```bash
 uvicorn src.api:app --reload
+```
 
 API буде доступне на: http://127.0.0.1:8000/docs
 
-
 3️. Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
+```
 
 Інтерфейс буде доступний на: http://localhost:5173
-````

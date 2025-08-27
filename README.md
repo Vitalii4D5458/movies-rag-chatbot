@@ -1,7 +1,6 @@
 # Movies RAG Chatbot
 
-Інтерактивний чат-бот, який допомагає знаходити та коротко описувати фільми на основі їх сюжетів, жанрів та описів.  
-Поєднання **FastAPI + FAISS + SentenceTransformers + Gemini API** на бекенді та **React + Tailwind** на фронтенді.
+Інтерактивний чат-бот, який допомагає знаходити та коротко описувати фільми на основі їх сюжетів, жанрів та описів. Поєднання **FastAPI + FAISS + SentenceTransformers + Gemini API** на бекенді та **React + Tailwind** на фронтенді.
 
 ---
 
@@ -12,7 +11,7 @@
   - [FastAPI](https://fastapi.tiangolo.com/) — REST API
   - [FAISS](https://github.com/facebookresearch/faiss) — пошук за векторними embeddings
   - [SentenceTransformers](https://www.sbert.net/) — генерація embeddings
-  - [LLM] (підключається як провайдер; можливі варіанти: Gemini, OpenAI, локальні моделі через Hugging Face Transformers)
+  - [LLM] — підключається як провайдер; можливі варіанти: Gemini, OpenAI, локальні моделі через Hugging Face Transformers
   - [Pandas, NumPy] — обробка даних
 
 - **Frontend**
@@ -23,6 +22,7 @@
 
 ## Структура проєкту
 
+```text
 movies-rag-chatbot/
 │
 ├── backend/
@@ -44,6 +44,7 @@ movies-rag-chatbot/
 ├── .gitignore
 ├── requirements.txt # залежності бекенду
 └── README.md
+```
 
 ---
 
@@ -56,7 +57,8 @@ git clone https://github.com/<your-username>/movies-rag-chatbot.git
 cd movies-rag-chatbot
 ```
 
-2️. Backend
+### 2️. Backend
+
 Встановлення залежностей
 
 ```bash
@@ -65,7 +67,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Змінні середовища
+Змінні середовища  
 Створи файл .env у backend/ з вмістом:
 
 ```bash
@@ -87,7 +89,7 @@ uvicorn src.api:app --reload
 
 API буде доступне на: http://127.0.0.1:8000/docs
 
-3️. Frontend
+### 3️. Frontend
 
 ```bash
 cd frontend
@@ -96,3 +98,9 @@ npm run dev
 ```
 
 Інтерфейс буде доступний на: http://localhost:5173
+
+### Приклад використання
+
+```bash
+curl -X POST "http://localhost:8000/ask" -H "Content-Type: application/json" -d "{\"query\": \"Tell me about Titanic\"}"
+```

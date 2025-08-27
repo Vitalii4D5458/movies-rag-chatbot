@@ -1,4 +1,3 @@
-# api.py
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +23,11 @@ class AskRequest(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 
 @app.post("/ask", response_model=AskResponse)
 async def ask(req: AskRequest):

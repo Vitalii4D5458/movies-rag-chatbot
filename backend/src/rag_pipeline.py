@@ -1,4 +1,3 @@
-# rag_pipeline.py 
 import faiss, json
 from sentence_transformers import SentenceTransformer
 import numpy as np
@@ -11,39 +10,29 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.0-flash")
 
-# Функція для скорочення контексту
 def summarize_context(context, max_length=600):
-    """
-    Скорочує контекст до заданої максимальної довжини.
-    """
+ 
     if len(context) > max_length:
         return context[:max_length] + "..."
     return context
 
-# Завантажуємо FAISS-індекс та метадані
 def load_index_and_metadata(index_path, meta_path):
     index = faiss.read_index(index_path)
     with open(meta_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
     return index, metadata
 
-# Функція для RAG
 def rag_search(query, index, metadata, num_results=5):
-    # створюємо embedding для запиту
+    
     query_embedding = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2").encode([query])
     
-    # шукаємо схожі документи
     distances, indices = index.search(np.array(query_embedding, dtype="float32"), num_results)
     
-    # отримуємо релевантні документи
     relevant_docs = [metadata[i] for i in indices[0]]
     
     return relevant_docs
 
 def generate_short_answer(query, relevant_docs):
-    """
-    Формує коротшу відповідь на основі релевантних документів та запиту.
-    """
     context = ""
     for doc in relevant_docs:
         context += f"Title: {doc['Series_Title']}, Description: {doc['Overview']}\n"

@@ -1,10 +1,10 @@
 # Movies RAG Chatbot
 
-## An interactive chatbot that helps find and briefly describe movies based on their plots, genres, and descriptions. A combination of **FastAPI + FAISS + SentenceTransformers + LLM(Gemini)** on the backend and **React + Tailwind** on the frontend.
+### An interactive chatbot that helps find and briefly describe movies based on their plots, genres, and descriptions. A combination of **FastAPI + FAISS + SentenceTransformers + LLM(Gemini)** on the backend and **React + Tailwind** on the frontend.
 
 ## Features
 
-- Ingest imdb_top_1000.csv(https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows) and build FAISS index of plot embeddings.
+- Ingest [imdb_top_1000.csv](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows) and build FAISS index of plot embeddings.
 - Fast nearest-neighbor retrieval using FAISS.
 - Generate user-friendly answers with LLM using retrieved plots as context.
 - Simple FastAPI server with /ask endpoint.
@@ -74,7 +74,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Create a .env file in backend/ with the following content:
+Create a .env file in movies-rag-chatbot/ with the following content:
 
 ```bash
 GEMINI_API_KEY=your_google_gemini_api_key
